@@ -1,0 +1,14 @@
+
+proxy-groups:
+-
+  name: 国外流量
+  type: url-test
+  url: "http://www.gstatic.com/generate_204"
+  interval: 300
+  proxies:
+    - 'Hong Kong-01'
+    - 'Hong Kong-02'
+    - 'Hong Kong-03'
+    - 'Hong Kong-04'
+    - 直接连接
+-
