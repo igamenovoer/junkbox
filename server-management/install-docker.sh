@@ -1,5 +1,11 @@
 #/bin/bash
 
+# require root
+if [ "$EUID" -ne 0 ]; then
+  echo "Please run as root"
+  exit 1
+fi
+
 # do we have proxy set in http_proxy or HTTP_PROXY?
 # if yes, use it as the proxy, set it to USER_PROXY
 if [ -n "$http_proxy" ]; then

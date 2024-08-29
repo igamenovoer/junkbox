@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # create users and add them to docker group
 # Usage: ./create-users.sh <user1> <user2> <user3> ...
 
@@ -6,6 +8,22 @@ if [ "$EUID" -ne 0 ]
   then echo "Please run as root"
   exit
 fi
+
+# get userlist
+if [ "$#" -eq 0 ]; then
+    echo "Usage: $0 <user1> <user2> <user3> ..."
+    exit 1
+else
+    userlist="$@"
+fi
+
+# remove duplicate
+userlist=$(echo $userlist | tr ' ' '\n' | uniq)
+
+# sort userlist by username
+userlist=$(echo $userlist | tr ' ' '\n' | sort)
+
+echo "Creating users: $userlist"
 
 # check if docker group exists
 if ! grep -q docker /etc/group
@@ -28,7 +46,7 @@ then
 fi
 
 # create users
-for user in "$@"
+for user in $userlist;
 do
     # check if user exists
     if id "$user" >/dev/null 2>&1
@@ -43,8 +61,8 @@ do
         # also add to ifusers
         usermod -aG ifusers "$user"
         
-        # set password as the same with username
-        echo "$user:$user" | chpasswd
+        # set password as the same with username@if
+        echo "$user:$user@if" | chpasswd
         echo "user $user created with password $user"
     fi
 done
