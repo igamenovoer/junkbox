@@ -1,0 +1,57 @@
+proxy-groups:
+-
+  name: 国外流量
+  type: url-test
+  url: "http://www.gstatic.com/generate_204"
+  interval: 300
+  proxies:
+    - 'Hong Kong-01'
+    - 'Hong Kong-02'
+    - 'Hong Kong-03'
+    - 'Hong Kong-04'
+    - 'Hong Kong-05'
+    - 'Hong Kong-06'
+    - 'Hong Kong-07'
+    - 'Hong Kong-08'
+    - 'Hong Kong-09'
+    - 'Hong Kong-10'
+    - 'Hong Kong-11'
+    - 'Hong Kong-12'
+    - 'Hong Kong-13'
+    - 'Hong Kong-14'
+    - 'Hong Kong-15'
+    - 'Hong Kong-16'
+    - 'Hong Kong-17'
+    - 'Hong Kong-18'
+    - 'Hong Kong-19'
+    - 'Hong Kong-20'
+    - Taiwan-01
+    - Taiwan-02
+    - Taiwan-03
+    - Taiwan-04
+    - Taiwan-05
+    - Taiwan-06
+    - Taiwan-07
+    - Taiwan-08
+    - Taiwan-09
+    - Taiwan-10
+    - Japan-01
+    - Japan-02
+    - Japan-03
+    - Japan-04
+    - Japan-05
+    - Japan-06
+    - Japan-07
+    - Japan-08
+    - Japan-09
+    - Japan-10
+    - Singapore-01
+    - Singapore-02
+    - Singapore-03
+    - Singapore-04
+    - Singapore-05
+    - Singapore-06
+    - Singapore-07
+    - Singapore-08
+    - Singapore-09
+    - Singapore-10

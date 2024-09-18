@@ -1,0 +1,24 @@
+services:
+  # the proxy service
+  clash:
+    image: dreamacro/clash:v1.18.0
+    container_name: clash
+    restart: always
+    network_mode: host
+    command: /bin/bash
+    stdin_open: true
+    tty: true
+    volumes:
+      - /data1/admin/clash/config:/root/.config/clash
+    environment:
+      - TZ=Asia/Shanghai
+  ui-yacd:
+    image: haishanh/yacd
+    depends_on: 
+      - clash
+    container_name: yacd
+    restart: always
+    ports:
+      - "9080:80" # the port of this ui
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
