@@ -2,8 +2,8 @@
 
 # this script setup proxy for apt
 # it accepts the proxy (e.g., http://127.0.0.1:7890) as an argument
-# if the proxy is not given, raise error
-# if the proxy is given, add it to /etc/apt/apt.conf.d/proxy.conf
+# if the proxy is not given, try to use http_proxy environment variable
+# if proxy is available, add it to /etc/apt/apt.conf.d/proxy.conf
 
 # am I root?
 if [ "$EUID" -ne 0 ]; then
@@ -11,12 +11,19 @@ if [ "$EUID" -ne 0 ]; then
   exit 1
 fi
 
-if [ "$#" -ne 1 ]; then
+http_proxy_from_env=$(printenv http_proxy)
+echo "got http_proxy from env: $http_proxy_from_env"
+
+# Get proxy from argument or environment
+if [ "$#" -eq 1 ]; then
+  USER_PROXY=$1
+elif [ -n "$http_proxy_from_env" ]; then
+  USER_PROXY=$http_proxy_from_env
+else
+  echo "No proxy specified and http_proxy environment variable not set"
   echo "Usage: $0 <proxy>"
   exit 1
 fi
-
-USER_PROXY=$1
 
 # add proxy to apt
 echo "Setting up proxy for apt"
