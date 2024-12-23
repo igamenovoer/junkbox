@@ -1,0 +1,2 @@
+- friendly pi default user: pi
+- default password: fa
