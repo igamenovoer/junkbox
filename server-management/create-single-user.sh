@@ -34,12 +34,12 @@ then
     exit 1
 fi
 
-echo "create user $user"
-useradd -m -s /bin/bash "$user"
+echo "create user $username"
+useradd -m -s /bin/bash "$username"
 
 # also add to group
-echo "add user $user to $group_name"
-usermod -aG $group_name "$user"
+echo "add user $username to $group_name"
+usermod -aG $group_name "$username"
 
 # check if docker group exists, if yes, add user to docker group
 # if not, skip
@@ -48,10 +48,10 @@ then
     echo "docker group does not exist"
     echo "skip adding user to docker group"
 else
-    echo "add user $user to docker group"
-    usermod -aG docker "$user"
+    echo "add user $username to docker group"
+    usermod -aG docker "$username"
 fi
 
 # set password as the same with username@if
-echo "$user:$user@if" | chpasswd
-echo "user $user created with password $user"
+echo "$username:$username@if" | chpasswd
+echo "user $username created with password $username@if"

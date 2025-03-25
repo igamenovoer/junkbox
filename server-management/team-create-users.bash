@@ -33,6 +33,6 @@ for user in $TEAM_USER_LIST; do
     if [ "$DRY_RUN" = true ]; then
         echo "[DRY RUN] Would execute: ./create-single-user.sh $user $user_id $TEAM_GROUP_NAME"
     else
-        ./create-single-user.sh $user $user_id $TEAM_GROUP_NAME
+        bash ./create-single-user.sh $user $user_id $TEAM_GROUP_NAME
     fi
 done
