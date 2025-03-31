@@ -7,3 +7,9 @@ if [ "$EUID" -ne 0 ]; then
 fi
 
 # check if ./change-user-uid.sh exists
+TEAM_USER_LIST="huangzhe nieyujie shidebo linzhi chengxiao qinchao zhangleichao"
+
+for user in $TEAM_USER_LIST; do
+    echo "User: $user, UID: $(id -u $user)"
+done
+

@@ -34,8 +34,8 @@ then
     exit 1
 fi
 
-echo "create user $username"
-useradd -m -s /bin/bash "$username"
+echo "create user $username with id $user_id"
+useradd -m -s /bin/bash -u "$user_id" "$username"
 
 # also add to group
 echo "add user $username to $group_name"

@@ -51,8 +51,12 @@ fi
 # fi
 
 # assign the new UID to the user
-usermod -u "$uid" "$username"
-echo "User $username has been assigned UID $uid"
+if usermod -u "$uid" "$username"; then
+    echo "User $username has been assigned UID $uid"
+else
+    echo "Error: Failed to assign UID $uid to user $username"
+    exit 1
+fi
 
 # if group_name is provided, set user primary group to group_name
 if [ -n "$group_name" ]; then
