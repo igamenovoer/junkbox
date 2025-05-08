@@ -15,6 +15,10 @@ useradd -m -s /bin/bash -G sudo,ssh admin
 echo "Setting password for admin user..."
 echo "admin:admin" | chpasswd
 
+# Set password for root user
+echo "Setting password for root user..."
+echo "root:root" | chpasswd
+
 # Ensure SSH configuration allows password login and X forwarding
 echo "Configuring SSH settings..."
 sed -i 's/#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/sshd_config
@@ -26,13 +30,25 @@ mkdir -p /home/admin/.ssh
 chmod 700 /home/admin/.ssh
 chown admin:admin /home/admin/.ssh
 
+# Create .ssh directory for root user
+mkdir -p /root/.ssh
+chmod 700 /root/.ssh
+
 # Generate SSH key for admin user with passphrase "admin"
 echo "Generating SSH key for admin user..."
 su - admin -c "ssh-keygen -t rsa -b 4096 -f /home/admin/.ssh/id_rsa -N 'admin'"
 
-# Add the public key to authorized_keys
+# Generate SSH key for root user with passphrase "root"
+echo "Generating SSH key for root user..."
+ssh-keygen -t rsa -b 4096 -f /root/.ssh/id_rsa -N 'root'
+
+# Add the public key to authorized_keys for admin
 su - admin -c "cat /home/admin/.ssh/id_rsa.pub >> /home/admin/.ssh/authorized_keys"
 su - admin -c "chmod 600 /home/admin/.ssh/authorized_keys"
+
+# Add the public key to authorized_keys for root
+cat /root/.ssh/id_rsa.pub >> /root/.ssh/authorized_keys
+chmod 600 /root/.ssh/authorized_keys
 
 # Print the public and private key of admin user
 echo "Admin user's public SSH key:"
@@ -41,4 +57,12 @@ echo ""
 echo "Admin user's private SSH key:"
 cat /home/admin/.ssh/id_rsa
 
+# Print the public and private key of root user
+echo "Root user's public SSH key:"
+cat /root/.ssh/id_rsa.pub
+echo ""
+echo "Root user's private SSH key:"
+cat /root/.ssh/id_rsa
+
 echo "admin user created successfully with SSH access and SSH key, user name and password are admin:admin"
+echo "root user configured successfully with SSH access and SSH key, password is root"
