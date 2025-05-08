@@ -19,11 +19,16 @@ echo "admin:admin" | chpasswd
 echo "Setting password for root user..."
 echo "root:root" | chpasswd
 
-# Ensure SSH configuration allows password login and X forwarding
+# Ensure SSH configuration allows password login, X forwarding, and root login
 echo "Configuring SSH settings..."
 sed -i 's/#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/sshd_config
 sed -i 's/#X11Forwarding yes/X11Forwarding yes/' /etc/ssh/sshd_config
 sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
+
+# Make sure root login is explicitly enabled
+if ! grep -q "^PermitRootLogin yes" /etc/ssh/sshd_config; then
+    echo "PermitRootLogin yes" >> /etc/ssh/sshd_config
+fi
 
 # Create .ssh directory for admin user
 mkdir -p /home/admin/.ssh
@@ -50,6 +55,11 @@ su - admin -c "chmod 600 /home/admin/.ssh/authorized_keys"
 cat /root/.ssh/id_rsa.pub >> /root/.ssh/authorized_keys
 chmod 600 /root/.ssh/authorized_keys
 
+# Restart SSH service in Docker container
+echo "Restarting SSH service in Docker container..."
+pkill sshd || true
+/usr/sbin/sshd
+
 # Print the public and private key of admin user
 echo "Admin user's public SSH key:"
 cat /home/admin/.ssh/id_rsa.pub
@@ -66,3 +76,4 @@ cat /root/.ssh/id_rsa
 
 echo "admin user created successfully with SSH access and SSH key, user name and password are admin:admin"
 echo "root user configured successfully with SSH access and SSH key, password is root"
+echo "SSH has been configured to allow direct root login in Docker container"
