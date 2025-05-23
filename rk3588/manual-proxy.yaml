@@ -1,0 +1,52 @@
+# Clash configuration file
+# this is used in clients
+
+# Port for Clash's local HTTP proxy (your applications will connect to this)
+port: 7890
+
+# Port for Clash's local SOCKS5 proxy (optional, uncomment if needed)
+# socks-port: 7891
+
+# Allow other devices on your local network to connect to Clash (optional)
+# allow-lan: false
+
+# RESTful API for external controllers (e.g., web UI like Yacd or ClashX dashboard)
+# Default address is 127.0.0.1:9090. Set to 0.0.0.0:9090 to allow access from LAN.
+external-controller: '127.0.0.1:9090'
+
+# Log level: info, warning, error, debug, silent
+log-level: info
+
+# Proxies: Define your proxy servers here
+proxies:
+  - name: "MyProxy"                     # A name for your proxy
+    type: http                         # Type of the proxy (http, socks5, etc.)
+    server: "192.168.1.35"             # Your proxy server IP address
+    port: 3128                         # Your proxy's actual port number
+    # username: "your_username"        # Uncomment and set if your proxy requires authentication
+    # password: "your_password"        # Uncomment and set if your proxy requires authentication
+    # tls: false                       # Set to true if the proxy server itself uses TLS (HTTPS proxy connection)
+    # skip-cert-verify: false          # Set to true to skip certificate verification for TLS proxies
+
+# Proxy Groups: Define how proxies are selected and used
+proxy-groups:
+  - name: "PROXY_GROUP"                # Name of the proxy group
+    type: select                       # Type of group (e.g., select, url-test, fallback)
+                                       # 'select' means you can manually choose a proxy from the list
+    proxies:
+      - "MyProxy"                      # List of proxies in this group (referencing names from 'proxies' section)
+      # - "DIRECT"                     # Optional: Add DIRECT for direct connection without proxy
+      # - "REJECT"                     # Optional: Add REJECT to block traffic
+
+# Rules: Define how traffic is routed
+# Clash matches rules from top to bottom. The first matched rule takes effect.
+rules:
+  # Example rules (uncomment and modify as needed):
+  # - DOMAIN-SUFFIX,google.com,PROXY_GROUP  # Route all google.com traffic through PROXY_GROUP
+  # - DOMAIN-KEYWORD,example,DIRECT         # Route traffic with 'example' in domain directly
+  # - GEOIP,CN,DIRECT                       # Route traffic to Chinese IPs directly
+  # - DST-PORT,80,PROXY_GROUP               # Route all HTTP traffic through PROXY_GROUP
+  # - SRC-IP-CIDR,192.168.1.101/32,DIRECT   # Traffic from a specific source IP goes direct
+
+  - MATCH,PROXY_GROUP                     # Default rule: All other traffic goes through PROXY_GROUP
+                                          # Change PROXY_GROUP to DIRECT to have direct connection as default
