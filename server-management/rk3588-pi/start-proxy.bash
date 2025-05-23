@@ -36,12 +36,25 @@ acl Safe_ports port 777		# multiling http
 acl CONNECT method CONNECT
 
 # Access rules
-http_access deny !Safe_ports
-http_access deny CONNECT !SSL_ports
 http_access allow localhost manager
 http_access deny manager
+
+# Deny requests to ports not in Safe_ports. This is a primary security filter.
+http_access deny !Safe_ports
+
+# Allow localnet/localhost to use CONNECT to any port in Safe_ports.
+# This is intended to allow Clash Verge's latency check (e.g., CONNECT to port 80).
+http_access allow localnet CONNECT Safe_ports
+http_access allow localhost CONNECT Safe_ports
+
+# Deny CONNECT requests to non-SSL ports if not already allowed above.
+http_access deny CONNECT !SSL_ports
+
+# Allow general HTTP/S traffic for localnet and localhost (for non-CONNECT requests).
 http_access allow localnet
 http_access allow localhost
+
+# Deny all other traffic
 http_access deny all
 
 # Squid listening port
