@@ -1,0 +1,18 @@
+# to use this file, copy it to /etc/netplan/01-netplan.yaml
+# and run `sudo netplan apply` to apply the changes.
+# this uses eth0 to connect to the internet via DHCP, and eth1 with a static IP address for local network
+# and DNS server.
+
+network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    eth0:
+      dhcp4: true
+    eth1:
+      addresses:
+      - "192.168.1.35/24"
+      nameservers:
+        addresses:
+        - 192.168.1.1
+      dhcp4: false
